@@ -1,6 +1,33 @@
 version: '3'
 
+# This makes EVERY task run inside the uv venv — no more missing packages
+env_vars:
+  VIRTUAL_ENV: .venv
+  PATH: "{{.TaskfileDir}}/.venv/bin:{{.Env.PATH}}"
+
 tasks:
+  install:
+    desc: Install all deps (run once or after changes)
+    cmds:
+      - uv sync
+      - uv pip install --index-url https://download.pytorch.org/whl/cpu torch torchvision torchaudio
+      - uv pip install sentence-transformers faiss-cpu pyyaml rich numpy==1.26.4
+
+  ingest:
+    desc: Run social media ingestion
+    cmds:
+      - python -m data.ingestion.run
+
+  silver:
+    desc: Create real 384-dim embeddings with all-MiniLM-L6-v2
+    cmds:
+      - python data/silver/process.py
+
+  generate:
+    desc: Generate AI tweets from real data
+    cmds:
+      - python data/marketing/generate.py --company {{.COMPANY}} --query "{{.QUERY}}"
+
   up:
     desc: Start all services
     cmds:
@@ -12,28 +39,6 @@ tasks:
       - docker compose -f dev/docker-compose.yaml down
 
   status:
-    desc: Show container status
+    desc: Show status
     cmds:
       - docker compose -f dev/docker-compose.yaml ps
-
-  install:
-    desc: Install Python deps + torch + sentence-transformers (run once)
-    cmds:
-      - uv sync
-      - uv pip install --index-url https://download.pytorch.org/whl/cpu torch torchvision torchaudio
-      - uv pip install sentence-transformers faiss-cpu
-
-  ingest:
-    desc: Run social media ingestion
-    cmds:
-      - python -m data.ingestion.run
-
-  silver:
-    desc: Bronze to Silver + all-MiniLM-L6-v2 embeddings
-    cmds:
-      - python data/silver/process.py
-
-  generate:
-    desc: Generate 5 marketing tweets via RAG (Ollama)
-    cmds:
-      - python data/marketing/generate.py --company {{.COMPANY}} --query "{{.QUERY}}"
