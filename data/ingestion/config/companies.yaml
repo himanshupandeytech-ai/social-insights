@@ -1,0 +1,26 @@
+companies:
+  - name: Samsung
+    twitter_keywords: "Samsung OR Galaxy OR S24 OR S23 OR GalaxyZ OR GalaxyTab OR GalaxyWatch OR GalaxyFold OR GalaxyS24"
+    reddit_subreddits:
+      - GalaxyFold
+      - Samsung
+      - GalaxyS
+      - Android
+      - samsunggalaxy
+      - smartphones
+      - tech
+      - gadgets
+      - mobiletech
+      - AndroidQuestions
+  - name: Huawei
+    twitter_keywords: "Huawei OR Mate60 OR P60 OR HarmonyOS OR EMUI OR Honor OR Mate50 OR Mate70"
+    reddit_subreddits:
+      - Huawei
+      - AndroidPhones
+      - Android
+      - PocoPhone
+      - smartphones
+      - tech
+      - gadgets
+      - mobiletech
+      - ChineseTech

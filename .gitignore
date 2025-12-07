@@ -1,0 +1,69 @@
+# === Python / uv ===
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+uv.lock
+.venv/
+venv/
+.env
+.env.local
+*.env.*
+
+# === Local files / temp ===
+.last_ingest.txt
+*.bak
+*.log
+.DS_Store
+Thumbs.db
+
+# === Large / generated data ===
+data/ingestion/cache/
+data/models/
+word2vec.bin
+*.bin
+*.pt
+*.pth
+*.pkl
+
+# === Ollama / local LLMs ===
+ollama/
+
+# === Docker / dev ===
+dev/docker-compose.override.yml
+dev/.env
+
+# === Secrets / keys (never commit) ===
+*.pem
+*.key
+*.crt
+*.secret
+secrets/
+config/secrets/
+
+# === IDE / editors ===
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# === MacOS ===
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# === These are the only things you WANT to commit ===
+# Everything else below is explicitly allowed by being absent from ignore
+!Taskfile.yml
+!pyproject.toml
+!data/ingestion/
+!data/silver/
+!data/marketing/
+!data/ingestion/config/companies.yaml
+!data/ingestion/**/*.py
+!data/silver/**/*.py
+!data/marketing/**/*.py
+!dev/docker-compose.yaml
+

@@ -1,0 +1,39 @@
+version: '3'
+
+tasks:
+  up:
+    desc: Start all services
+    cmds:
+      - docker compose -f dev/docker-compose.yaml up -d --build
+
+  down:
+    desc: Stop services
+    cmds:
+      - docker compose -f dev/docker-compose.yaml down
+
+  status:
+    desc: Show container status
+    cmds:
+      - docker compose -f dev/docker-compose.yaml ps
+
+  install:
+    desc: Install Python deps + torch + sentence-transformers (run once)
+    cmds:
+      - uv sync
+      - uv pip install --index-url https://download.pytorch.org/whl/cpu torch torchvision torchaudio
+      - uv pip install sentence-transformers faiss-cpu
+
+  ingest:
+    desc: Run social media ingestion
+    cmds:
+      - python -m data.ingestion.run
+
+  silver:
+    desc: Bronze to Silver + all-MiniLM-L6-v2 embeddings
+    cmds:
+      - python data/silver/process.py
+
+  generate:
+    desc: Generate 5 marketing tweets via RAG (Ollama)
+    cmds:
+      - python data/marketing/generate.py --company {{.COMPANY}} --query "{{.QUERY}}"
