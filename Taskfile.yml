@@ -16,17 +16,17 @@ tasks:
   ingest:
     desc: Run social media ingestion
     cmds:
-      - python -m data.ingestion.run
+      - uv run python -m data.ingestion.run
 
   silver:
     desc: Create real 384-dim embeddings with all-MiniLM-L6-v2
     cmds:
-      - python data/silver/process.py
+      - uv run python data/silver/process.py
 
   generate:
     desc: Generate AI tweets from real data
     cmds:
-      - python data/marketing/generate.py --company {{.COMPANY}} --query "{{.QUERY}}"
+      - uv run python data/marketing/generate.py --company {{.COMPANY}} --query "{{.QUERY}}"
 
   up:
     desc: Start all services
