@@ -83,6 +83,43 @@ def scrape_reddit(company: str, subreddits: List[str], limit_per_sub: int = 100,
                                 author = auth_el.get_text(strip=True).replace("u/", "").replace("@", "")
                                 break
                         
+                        # Get engagement metrics (score, comments)
+                        score = 0
+                        comments = 0
+                        
+                        # Try to get score (upvotes)
+                        score_selectors = [
+                            "[data-testid='post-vote-score']",
+                            ".score",
+                            ".midcol .score.unvoted",
+                            "div.score.likes"
+                        ]
+                        for score_sel in score_selectors:
+                            score_el = post.select_one(score_sel)
+                            if score_el:
+                                try:
+                                    score_text = score_el.get_text(strip=True).replace('k', '000').replace('m', '000000')
+                                    score = int(float(score_text))
+                                    break
+                                except:
+                                    pass
+                        
+                        # Try to get comments count
+                        comment_selectors = [
+                            "[data-testid='comment-count']",
+                            "a.comments",
+                            ".comments .count"
+                        ]
+                        for comment_sel in comment_selectors:
+                            comment_el = post.select_one(comment_sel)
+                            if comment_el:
+                                try:
+                                    comment_text = comment_el.get_text(strip=True).replace('k', '000').replace('m', '000000')
+                                    comments = int(float(comment_text))
+                                    break
+                                except:
+                                    pass
+                        
                         posts.append({
                             "post_id": f"reddit_{post.get('data-fullname', f'reddit_{len(posts)}_{int(time.time()*1e6)}')}",
                             "company": company,
@@ -91,6 +128,9 @@ def scrape_reddit(company: str, subreddits: List[str], limit_per_sub: int = 100,
                             "content": title[:2000],
                             "posted_at": datetime.utcnow(),
                             "url": link,
+                            "likes": score,  # Reddit upvotes
+                            "shares": 0,     # Reddit doesn't have shares
+                            "comments": comments,
                         })
                         
                         found_posts = True

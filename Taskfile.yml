@@ -19,9 +19,9 @@ tasks:
       - uv run python -m data.ingestion.run
 
   silver:
-    desc: Create real 384-dim embeddings with all-MiniLM-L6-v2
+    desc: Enhanced silver layer with FAANG-level transformations
     cmds:
-      - uv run python data/silver/process.py
+      - uv run python data/silver/process_enhanced.py
 
   generate:
     desc: Generate AI tweets from real data
